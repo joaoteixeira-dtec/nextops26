@@ -93,9 +93,14 @@ export function Hero() {
             <h1 className="mt-4 text-balance text-[2.25rem] font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.35rem]">
               <AnimatedWords text="A tua operação," />
               <br />
-              <span className="text-shimmer">
-                <AnimatedWords text="centralizada e inteligente." delay={0.2} />
-              </span>
+              <motion.span
+                initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="inline-block bg-gradient-to-r from-indigo-400 via-cyan-400 to-fuchsia-400 bg-clip-text text-transparent"
+              >
+                centralizada e inteligente.
+              </motion.span>
             </h1>
 
             {/* Subtitle */}

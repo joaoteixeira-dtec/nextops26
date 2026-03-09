@@ -139,15 +139,17 @@ a, button {
 .text-shimmer {
   background: linear-gradient(
     110deg,
-    rgba(255,255,255,0.9) 0%,
-    rgba(99,102,241,1) 25%,
-    rgba(34,211,238,1) 50%,
-    rgba(232,121,249,1) 75%,
-    rgba(255,255,255,0.9) 100%
+    #ffffff 0%,
+    #818cf8 20%,
+    #22d3ee 40%,
+    #e879f9 60%,
+    #818cf8 80%,
+    #ffffff 100%
   );
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
+  color: transparent;
   -webkit-text-fill-color: transparent;
   animation: shimmer 4s ease-in-out infinite;
 }
