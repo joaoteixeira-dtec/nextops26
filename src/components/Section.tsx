@@ -31,7 +31,7 @@ export function Section({
           >
             {eyebrow && (
               <div className="mb-3 inline-flex items-center gap-3 text-xs uppercase tracking-[0.22em] text-white/50">
-                <span className="h-[1px] w-10 bg-gradient-to-r from-indigo-400/60 to-transparent" />
+                <span className="h-[1px] w-10 bg-gradient-to-r from-cyan-400/60 to-transparent" />
                 {eyebrow}
               </div>
             )}

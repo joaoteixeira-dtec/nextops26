@@ -71,17 +71,18 @@ export function LeadForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-ink-900/60 p-5 shadow-glow backdrop-blur-2xl sm:p-6 lg:p-7">
-        <div className="flex items-start justify-between gap-3">
-          <div>
+    <div className="group/form relative overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-900/60 p-5 shadow-glow backdrop-blur-2xl sm:p-6 lg:p-7">
+        {/* Corner glow */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-40 w-40 rounded-full bg-cyan-500/[0.06] blur-3xl transition-opacity duration-500" />
+
+        <div>
+          <div className="flex items-center gap-2.5">
+            <div className="h-5 w-1 rounded-full bg-gradient-to-b from-cyan-400 to-blue-500" />
             <div className="text-sm font-bold">Diagnóstico + Mapa (48h)</div>
-            <p className="mt-1.5 text-[13px] leading-relaxed text-white/55">
-              Diz-nos o contexto. Respondemos com ganhos rápidos + proposta de sprint.
-            </p>
           </div>
-          <span className="hidden rounded-xl border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/50 sm:inline">
-            B2B
-          </span>
+          <p className="mt-2 text-[13px] leading-relaxed text-white/55">
+            Diz-nos o contexto. Respondemos com ganhos rápidos + proposta de sprint.
+          </p>
         </div>
 
         <form className="mt-5 grid gap-3.5" onSubmit={onSubmit} aria-label="Formulário de lead">
@@ -132,7 +133,7 @@ export function LeadForm() {
             type="submit"
             disabled={disabled}
             className={cn(
-              "group mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-ink-950 transition-all duration-300 hover:bg-white/90 hover:shadow-glow-sm disabled:opacity-60 active:scale-[0.98]",
+              "group mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-5 text-sm font-semibold text-white shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:shadow-cyan-500/30 hover:brightness-110 disabled:opacity-60 active:scale-[0.97]",
               !canSubmit && status === "idle" && "opacity-80"
             )}
           >

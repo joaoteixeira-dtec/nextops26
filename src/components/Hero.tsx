@@ -1,30 +1,8 @@
-import { motion, useScroll, useTransform, useInView, animate } from "framer-motion";
-import { ArrowRight, Bot, Gauge, Layers } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Button } from "./Button";
-import { Chip } from "./Chip";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowDown } from "lucide-react";
+import { useRef } from "react";
 import { Container } from "./Container";
-import { LeadForm } from "./LeadForm";
 import { useReducedMotion } from "../hooks/useReducedMotion";
-
-/* ── Animated counter ── */
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.5 });
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const ctrl = animate(0, target, {
-      duration: 1.8,
-      ease: [0.32, 0.72, 0, 1],
-      onUpdate: (v) => setValue(Math.round(v)),
-    });
-    return () => ctrl.stop();
-  }, [inView, target]);
-
-  return <span ref={ref}>{value}{suffix}</span>;
-}
 
 /* ── Word-by-word text reveal ── */
 function AnimatedWords({ text, className, delay = 0 }: { text: string; className?: string; delay?: number }) {
@@ -34,10 +12,10 @@ function AnimatedWords({ text, className, delay = 0 }: { text: string; className
       {words.map((word, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
+          initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.5, delay: delay + i * 0.04, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-block mr-[0.28em]"
+          transition={{ duration: 0.6, delay: delay + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+          className="inline-block mr-[0.3em]"
         >
           {word}
         </motion.span>
@@ -50,144 +28,106 @@ export function Hero() {
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], reduced ? ["0px", "0px"] : ["0px", "100px"]);
-  const y2 = useTransform(scrollYProgress, [0, 1], reduced ? ["0px", "0px"] : ["0px", "-80px"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-
-  const scrollToForm = () => {
-    document.getElementById("form")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => {
-      const el = document.querySelector("#form input") as HTMLInputElement | null;
-      el?.focus();
-    }, 650);
-  };
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.7], reduced ? [1, 1] : [1, 0.96]);
 
   return (
-    <div ref={ref} className="relative pt-28 sm:pt-32 lg:pt-36">
+    <div ref={ref} className="relative flex min-h-[100svh] items-center justify-center">
       <Container>
-        <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+        <motion.div style={{ opacity, scale }} className="flex flex-col items-center text-center">
 
-          {/* ── Left column ── */}
-          <motion.div style={{ opacity }} className="relative">
-
-            {/* Floating badge */}
-            <motion.div
-              style={{ y: y2 }}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="absolute -left-4 -top-6 hidden lg:block"
-            >
-              <div className="floating glass-strong rounded-2xl px-4 py-2.5 shadow-glow-sm">
-                <div className="flex items-center gap-2 text-xs text-white/80">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-                  </span>
-                  Diagnóstico em 48h
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Heading */}
-            <h1 className="mt-4 text-balance text-[2.25rem] font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-[3.35rem]">
-              <AnimatedWords text="A tua operação," />
-              <br />
-              <motion.span
-                initial={{ opacity: 0, y: 12, filter: "blur(4px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-block bg-gradient-to-r from-indigo-400 via-cyan-400 to-fuchsia-400 bg-clip-text text-transparent"
-              >
-                centralizada e inteligente.
-              </motion.span>
-            </h1>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="mt-5 max-w-lg text-pretty text-base leading-relaxed text-white/65 sm:text-lg"
-            >
-              ERP modular com IA Gemini. Menos erros, mais visibilidade — implementado por sprints.
-            </motion.p>
-
-            {/* Chips */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="mt-5 flex flex-wrap gap-2"
-            >
-              <Chip className="gap-1.5"><Layers size={13} /> ERP modular</Chip>
-              <Chip className="gap-1.5"><Bot size={13} /> Gemini IA</Chip>
-              <Chip className="gap-1.5"><Gauge size={13} /> Resultados reais</Chip>
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
-            >
-              <Button size="lg" onClick={scrollToForm} className="group justify-center">
-                Pedir Diagnóstico
-                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => document.getElementById("solucao")?.scrollIntoView({ behavior: "smooth" })}
-                className="justify-center"
-              >
-                Ver como funciona
-              </Button>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div style={{ y }} className="mt-10 grid grid-cols-3 gap-3">
-              <StatCard value={<><CountUp target={35} suffix="%" /></>} label="menos tarefas repetitivas" prefix="−" />
-              <StatCard value={<><CountUp target={50} suffix="%" /></>} label="menos erros operacionais" prefix="−" />
-              <StatCard value={<>Tempo real</>} label="visibilidade da operação" />
-            </motion.div>
-
-            {/* Industries bar */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.2 }}
-              className="mt-6 glass rounded-2xl p-3.5"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-white/50">
-                <span className="uppercase tracking-[0.2em]">Indicado para</span>
-                <span>Distribuição · Serviços · Armazéns · Backoffice</span>
-              </div>
-            </motion.div>
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mb-8"
+          >
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-1.5 text-xs font-medium text-white/70 backdrop-blur-sm">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              </span>
+              Software sob medida · IA aplicada
+            </span>
           </motion.div>
 
-          {/* ── Right column — Form ── */}
-          <div id="form" className="relative scroll-mt-28 lg:mt-4">
-            <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          {/* Headline */}
+          <h1 className="max-w-4xl text-balance text-[2.5rem] font-bold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+            <AnimatedWords text="Tecnologia que" delay={0.15} />
+            <br />
+            <motion.span
+              initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="bg-gradient-to-r from-indigo-400 via-cyan-400 to-fuchsia-400 bg-clip-text text-transparent"
             >
-              <LeadForm />
-            </motion.div>
-          </div>
-        </div>
-      </Container>
-    </div>
-  );
-}
+              move o teu negócio.
+            </motion.span>
+          </h1>
 
-function StatCard({ value, label, prefix }: { value: React.ReactNode; label: string; prefix?: string }) {
-  return (
-    <div className="glass hover-glow rounded-2xl p-4 transition-smooth">
-      <div className="text-xl font-bold sm:text-2xl">{prefix}{value}</div>
-      <div className="mt-1 text-xs text-white/55 sm:text-sm">{label}</div>
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.65 }}
+            className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-white/55 sm:text-lg lg:text-xl"
+          >
+            Soluções digitais à medida, de ERP a apps para negócios locais.
+            <br className="hidden sm:block" />
+            Desenhamos, construímos e entregamos por sprints.
+          </motion.p>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.85 }}
+            className="mt-10"
+          >
+            <a
+              href="#form"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className="group inline-flex h-13 items-center gap-2.5 rounded-2xl bg-white px-8 text-[15px] font-semibold text-ink-950 shadow-soft transition-all duration-300 hover:bg-white/90 hover:shadow-glow-sm active:scale-[0.98]"
+            >
+              Falar connosco
+              <ArrowDown size={16} className="transition-transform group-hover:translate-y-0.5" />
+            </a>
+          </motion.div>
+
+          {/* Trusted industries */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="mt-16 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13px] text-white/30"
+          >
+            {["ERP", "Restaurantes", "Cabeleireiros", "Oficinas", "Clínicas", "Serviços"].map((s) => (
+              <span key={s}>{s}</span>
+            ))}
+          </motion.div>
+        </motion.div>
+      </Container>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2 text-white/20"
+        >
+          <span className="text-[10px] uppercase tracking-[0.2em]">Scroll</span>
+          <div className="h-8 w-[1px] bg-gradient-to-b from-white/20 to-transparent" />
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

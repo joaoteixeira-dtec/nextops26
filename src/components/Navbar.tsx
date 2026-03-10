@@ -12,6 +12,8 @@ const NAV = [
   { id: "features", label: "Módulos" },
   { id: "processo", label: "Processo" },
   { id: "casos", label: "Casos" },
+  { id: "resultados", label: "Resultados" },
+  { id: "oferta", label: "Oferta" },
   { id: "faq", label: "FAQ" },
 ];
 
@@ -63,9 +65,9 @@ export function Navbar({ onCta }: { onCta: () => void }) {
             className="flex items-center gap-3"
           >
             <Logo className="h-9 w-auto" />
-            <div className="hidden sm:block">
-              <div className="text-sm font-semibold leading-none">NextOps AI</div>
-              <div className="mt-1 text-[11px] text-white/50">Processos claros. Decisões rápidas.</div>
+            <div>
+              <div className="text-xs font-semibold leading-none sm:text-sm">NextOps AI</div>
+              <div className="mt-0.5 text-[9px] text-white/50 sm:mt-1 sm:text-[11px]">Tecnologia que move o teu negócio.</div>
             </div>
           </a>
 

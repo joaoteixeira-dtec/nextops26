@@ -1,93 +1,173 @@
-import { BadgeCheck, Shield, Zap } from "lucide-react";
+import { Check, Rocket, Shield, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { Reveal } from "../components/Reveal";
 import { Section } from "../components/Section";
+import { MobileCarousel } from "../components/MobileCarousel";
+import type { LucideIcon } from "lucide-react";
 
-const plans = [
+interface Plan {
+  icon: LucideIcon;
+  title: string;
+  price: string;
+  desc: string;
+  bullets: string[];
+  cta: string;
+  highlight?: boolean;
+  color: string;
+  bg: string;
+  glow: string;
+  border: string;
+  dot: string;
+  gradient: string;
+}
+
+const plans: Plan[] = [
   {
     icon: Zap,
     title: "Diagnóstico",
     price: "Gratuito",
-    desc: "Saber o que automatizar e por onde começar.",
-    bullets: ["Mapa de ganhos rápidos", "3 gargalos + 3 automações", "Proposta de sprint"],
+    desc: "Analisamos o teu negócio e mostramos por onde começar.",
+    bullets: [
+      "Mapa de ganhos rápidos",
+      "3 gargalos + 3 automações",
+      "Proposta de sprint personalizada",
+      "Sem compromisso",
+    ],
+    cta: "Pedir diagnóstico",
     highlight: true,
+    color: "text-cyan-400",
+    bg: "bg-cyan-500/10",
+    glow: "rgba(34,211,238,0.08)",
+    border: "border-cyan-400/20",
+    dot: "bg-cyan-400",
+    gradient: "from-cyan-500 to-blue-500",
   },
   {
-    icon: BadgeCheck,
-    title: "ERP Core",
+    icon: Rocket,
+    title: "Implementação",
     price: "2–4 semanas",
-    desc: "O essencial a funcionar, equipa alinhada.",
-    bullets: ["Módulos core", "Permissões e auditoria", "Dashboards e exports"],
+    desc: "A plataforma à medida, pronta a usar pela equipa.",
+    bullets: [
+      "App ou ERP personalizado",
+      "Módulos que o negócio precisa",
+      "Permissões e dashboards",
+      "Formação incluída",
+    ],
+    cta: "Saber mais",
+    color: "text-violet-400",
+    bg: "bg-violet-500/10",
+    glow: "rgba(167,139,250,0.08)",
+    border: "hover:border-violet-500/20",
+    dot: "bg-violet-400",
+    gradient: "from-violet-500 to-fuchsia-500",
   },
   {
     icon: Shield,
-    title: "ERP + IA",
-    price: "1–2 semanas",
-    desc: "Automação real, menos trabalho repetitivo.",
-    bullets: ["Leitura de docs", "Assistente interno", "Triagem e resumos"],
+    title: "Evolução contínua",
+    price: "Sprints mensais",
+    desc: "Novas funcionalidades, IA e suporte dedicado.",
+    bullets: [
+      "Automação com IA integrada",
+      "Novos módulos por sprint",
+      "Suporte prioritário",
+      "Sem contratos longos",
+    ],
+    cta: "Falar connosco",
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10",
+    glow: "rgba(52,211,153,0.08)",
+    border: "hover:border-emerald-500/20",
+    dot: "bg-emerald-400",
+    gradient: "from-emerald-500 to-teal-500",
   },
 ];
+
+function scrollToForm(e: React.MouseEvent) {
+  e.preventDefault();
+  document.getElementById("form")?.scrollIntoView({ behavior: "smooth" });
+}
+
+function PlanCard({ p }: { p: Plan }) {
+  return (
+    <div
+      className={[
+        "group relative flex h-full flex-col rounded-2xl border p-6 transition-all duration-500",
+        p.highlight
+          ? `${p.border} bg-gradient-to-b from-cyan-500/[0.06] to-transparent`
+          : `border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] ${p.border}`,
+      ].join(" ")}
+    >
+      <div
+        className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: p.glow }}
+      />
+      {p.highlight && (
+        <div className={`absolute -top-3 right-4 rounded-full bg-gradient-to-r ${p.gradient} px-3 py-0.5 text-[11px] font-semibold text-white`}>
+          Comece por aqui
+        </div>
+      )}
+      <div className={`inline-flex w-fit rounded-xl ${p.bg} p-3 ring-1 ring-white/[0.06] transition-all duration-300 group-hover:scale-110 group-hover:ring-white/[0.1]`}>
+        <p.icon size={18} className={p.color} />
+      </div>
+      <div className="mt-4 text-sm font-medium text-white/60">{p.title}</div>
+      <div className="mt-1 text-2xl font-bold tracking-tight">{p.price}</div>
+      <p className="mt-2 text-[13px] text-white/40 transition-colors duration-300 group-hover:text-white/55">{p.desc}</p>
+      <div className="my-5 h-px w-full bg-white/[0.06]" />
+      <ul className="grid gap-2.5 text-[13px] text-white/50">
+        {p.bullets.map((b) => (
+          <li key={b} className="flex items-start gap-2.5 transition-colors duration-300 group-hover:text-white/65">
+            <Check size={14} className={`mt-[2px] shrink-0 ${p.color} opacity-50`} />
+            <span>{b}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-auto pt-6">
+        <a
+          href="#form"
+          onClick={scrollToForm}
+          className={[
+            "inline-flex h-11 w-full items-center justify-center rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.97]",
+            p.highlight
+              ? `bg-gradient-to-r ${p.gradient} text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:brightness-110`
+              : "border border-white/[0.08] bg-white/[0.04] text-white hover:bg-white/[0.08]",
+          ].join(" ")}
+        >
+          {p.cta}
+        </a>
+      </div>
+    </div>
+  );
+}
 
 export function Pricing() {
   return (
     <Section
+      id="oferta"
       eyebrow="Oferta"
       title="Começa simples. Evolui rápido."
-      subtitle="A porta de entrada é o diagnóstico. Implementamos por sprints — sem surpresas."
+      subtitle="A porta de entrada é o diagnóstico. Implementamos por sprints, sem surpresas."
     >
-      <div className="grid gap-4 lg:grid-cols-3">
+      {/* Desktop grid */}
+      <div className="hidden sm:grid gap-5 pt-4 lg:grid-cols-3">
         {plans.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.06} variant="blur-up">
+          <Reveal key={p.title} delay={i * 0.07} variant="blur-up">
             <motion.div
-              whileHover={{ y: -4 }}
+              whileHover={{ y: -5 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className={[
-                "relative h-full rounded-2xl border p-6 transition-colors duration-400",
-                p.highlight
-                  ? "border-indigo-400/20 bg-gradient-to-b from-indigo-500/[0.06] to-transparent shadow-glow-sm"
-                  : "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.1] hover:bg-white/[0.04]",
-              ].join(" ")}
+              className="h-full"
             >
-              {p.highlight && (
-                <div className="absolute -top-3 right-4 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 px-3 py-0.5 text-[11px] font-semibold text-white">
-                  Mais pedido
-                </div>
-              )}
-              <div className="flex items-start justify-between gap-3">
-                <div className={`rounded-xl p-2.5 ${p.highlight ? "bg-indigo-500/15" : "bg-white/[0.04]"}`}>
-                  <p.icon size={16} className={p.highlight ? "text-indigo-300" : "text-white/60"} />
-                </div>
-              </div>
-              <div className="mt-4 text-sm font-semibold">{p.title}</div>
-              <div className="mt-1 text-xl font-bold">{p.price}</div>
-              <p className="mt-2 text-[13px] text-white/50">{p.desc}</p>
-              <ul className="mt-4 grid gap-1.5 text-[13px] text-white/50">
-                {p.bullets.map((b) => (
-                  <li key={b} className="flex gap-2">
-                    <span className="mt-[6px] h-1 w-1 shrink-0 rounded-full bg-indigo-400/40" />
-                    {b}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#form"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("form")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className={[
-                  "mt-6 inline-flex h-10 w-full items-center justify-center rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98]",
-                  p.highlight
-                    ? "bg-white text-ink-950 hover:bg-white/90 hover:shadow-glow-sm"
-                    : "bg-white/[0.06] text-white hover:bg-white/[0.1] border border-white/[0.08]",
-                ].join(" ")}
-              >
-                Pedir diagnóstico
-              </a>
+              <PlanCard p={p} />
             </motion.div>
           </Reveal>
         ))}
       </div>
+
+      {/* Mobile carousel */}
+      <MobileCarousel className="sm:hidden" cardWidth={280} gap={12}>
+        {plans.map((p) => (
+          <PlanCard key={p.title} p={p} />
+        ))}
+      </MobileCarousel>
 
       <p className="mt-6 text-[11px] text-white/30">
         *Prazos variam conforme complexidade. A proposta final é definida no diagnóstico.
