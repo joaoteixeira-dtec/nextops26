@@ -52,9 +52,9 @@ const USERS = [
     phone: "+351 900 000 002",
   },
   {
-    email: "ana@nextopsai.com",
-    password: "Ana2026!",
-    name: "Ana Silva",
+    email: "luis@nextopsai.com",
+    password: "Luis2026!",
+    name: "Luís",
     role: "tecnico",
     phone: "+351 900 000 003",
   },
