@@ -50,7 +50,9 @@ const PERMISSIONS: Record<Role, Permission[]> = {
 
 export function hasPermission(role: Role | undefined, permission: Permission): boolean {
   if (!role) return false;
-  return PERMISSIONS[role].includes(permission);
+  const perms = PERMISSIONS[role];
+  if (!perms) return false;
+  return perms.includes(permission);
 }
 
 export function getPermissions(role: Role): Permission[] {

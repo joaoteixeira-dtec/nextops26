@@ -48,14 +48,14 @@ const USERS = [
     email: "joao@nextopsai.com",
     password: "Joao2026!",
     name: "João Teixeira",
-    role: "manager",
+    role: "comercial",
     phone: "+351 900 000 002",
   },
   {
     email: "ana@nextopsai.com",
     password: "Ana2026!",
     name: "Ana Silva",
-    role: "member",
+    role: "tecnico",
     phone: "+351 900 000 003",
   },
 ];
