@@ -152,11 +152,12 @@ export function Footer() {
           <div className="text-[11px] text-white/30">
             © {new Date().getFullYear()} NextOps AI. Todos os direitos reservados.
           </div>
-          <div className="flex items-center gap-1 text-[11px] text-white/25">
-            <span className="mr-1">Feito com</span>
-            <span className="inline-block animate-pulse text-red-400">♥</span>
-            <span className="ml-1">em Portugal</span>
-          </div>
+          <a
+            href="/backoffice/login"
+            className="text-[11px] text-white/25 transition-colors duration-300 hover:text-white/50"
+          >
+            Área reservada
+          </a>
         </div>
       </Container>
     </footer>
